@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './signIn.css';
 
 const SignIn = () => {
+    const navigate = useNavigate();
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -10,6 +12,7 @@ const SignIn = () => {
         let password = document.getElementById('password').value
         if (email != '') {
             if (!email.match(emailReg)) {
+                navigate('/dashboard')
                 alert("Invalid Email Address...!!!");
                 return false;
             }

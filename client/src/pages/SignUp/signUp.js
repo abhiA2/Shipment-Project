@@ -4,46 +4,52 @@ import './signUp.css';
 
 const SignUp = () => {
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    // const [email, setEmail] = useState();
+    // const [password, setPassword] = useState();
 
     const [user, setUser] = useState({
-        firstName: '',
-        lastName: '',
+        name: '',
         email: '',
         password: '',
         confirmPassword: ''
     });
 
-    let name, value;
+    let name, email, password, confirmPassword;
 
-    const submitHandler = (e) => {
-
+    const submitHandler = async (e) => {
         e.prevetDefault();
-        console.log(e);
-        name = e.target.value;
-        value = e.target.value;
+        setUser({ name, email, password, confirmPassword });
+        console.log(name, email, password, confirmPassword);
+        // setUser({ ...user })
 
-        setUser({ ...user, [name]: value })
-
-        const postURL = "http://localhost:3000/Shipment-T1/User-info/"
+        const postURL = "http://localhost:3001/signUp/"
         fetch(postURL, {
             method: 'POST',
+            crossDomain: true,
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "Access-Control-Alloq-Origin": "*",
             },
             body: JSON.stringify({
-                email: email,
-                password: password,
-                clockedIn: false,
-                dates: []
-            })
-        })
-            .then(() => {
-                alert('You have been added to the system!');
-            })
+                user: {
+                    name,
+                    email,
+                    password,
+                    confirmPassword
 
+                    // clockedIn: false,
+                }
+            })
+                .then((res) => {
+                    res.json();
+                    alert('You have been added to the system!');
+                })
+                .then((data) => {
+                    console.log(data, "user signUp");
+                })
+
+        })
     }
 
     return (
@@ -51,16 +57,16 @@ const SignUp = () => {
             <h2>Registration</h2>
             <form onSubmit={submitHandler}>
                 <div className="input-box">
-                    <input type="text" placeholder="Enter your name" required />
+                    <input type="text" placeholder="Enter your name" onChange={e => setUser({ name: e.target.value })} value={name} required />
                 </div>
                 <div className="input-box">
-                    <input type="email" placeholder="Enter your email" onChange={e => setEmail(e.target.value)} value={email} required />
+                    <input type="email" placeholder="Enter your email" onChange={e => setUser({ email: e.target.value })} value={user.email} required />
                 </div>
                 <div className="input-box">
-                    <input type="password" placeholder="Create password" required />
+                    <input type="password" placeholder="Create password" onChange={e => setUser({ password: e.target.value })} value={user.password} required />
                 </div>
                 <div className="input-box">
-                    <input type="password" placeholder="Confirm password" required />
+                    <input type="password" placeholder="Confirm password" onChange={e => setUser({ confirmPassword: e.target.value })} value={user.confirmPassword} required />
                 </div>
                 <div className="policy">
                     <input type="checkbox" />
